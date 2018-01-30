@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Brbb/sentiment.git"
+    "url": "git+https://github.com/IntelligentTrading/sentiment-analysis.git"
   },
   "author": "Francesco De Lisi",
   "license": "ISC",
   "bugs": { 
-    "url": "https://github.com/Brbb/sentiment/issues"
+    "url": "https://github.com/IntelligentTrading/sentiment-analysis/issues"
   },
-  "homepage": "https://github.com/Brbb/sentiment#readme",
+  "homepage": "https://github.com/IntelligentTrading/sentiment-analysis#readme",
   "dependencies": {
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
