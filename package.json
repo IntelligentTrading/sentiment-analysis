@@ -1,0 +1,25 @@
+{
+  "name": "sentiment",
+  "version": "1.0.0",
+  "description": "Sentiment Analysis Module",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brbb/sentiment.git"
+  },
+  "author": "Francesco De Lisi",
+  "license": "ISC",
+  "bugs": { 
+    "url": "https://github.com/Brbb/sentiment/issues"
+  },
+  "homepage": "https://github.com/Brbb/sentiment#readme",
+  "dependencies": {
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
+    "firebase-admin": "^5.5.1",
+    "node-telegram-bot-api": "^0.30.0"
+  }
+}
