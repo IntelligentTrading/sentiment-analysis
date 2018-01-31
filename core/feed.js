@@ -2,12 +2,19 @@ var crypto_panic_api = require('../api/cryptopanic').cryptoPanic;
 var dispatcher = require('../api/sentiment_dispatcher').dispatcher;
 var _ = require('lodash');
 var fs = require('fs');
+var redis = require('redis')
+rclient = redis.createClient();
+
+rclient.on("error", function (err) {
+    console.log("Error " + err);
+});
 
 var logger = fs.createWriteStream('sentiment.txt', {
     flags: 'a' // 'a' means appending (old data will be preserved)
 })
 
-var last_sent_feeds = [];
+var feedRequestInterval = 3000 // 30 * 60 * 1000;
+var lastSentFeeds = 'lastSentFeeds';
 var threshold_date = new Date()
 threshold_date.setUTCHours(0, 0, 0, 0) // let's get today at midnight and all the today's feeds 
 
@@ -20,19 +27,30 @@ var feedManager = {
 
                 sorted_feeds.map(selected_feed => {
                     //check if the news is duplicate or old
-                    if (last_sent_feeds.filter(lsf => lsf.id == selected_feed.id || lsf.created_at > selected_feed.created_at).length <= 0) {
-                        console.log(selected_feed)
-                        last_sent_feeds.push(selected_feed);
-                        if (last_sent_feeds.length > 10)
-                            last_sent_feeds = last_sent_feeds.splice(1);
+                    var redisFeeds = rclient.zrevrange(lastSentFeeds, 0, -1, (err, feedIds) => {
+                        if (feedIds.filter(feedId => feedId == selected_feed.id).length <= 0) {
 
-                        dispatcher.dispatch(selected_feed, 99);
-                        //send feed
-                    }
+                            console.log(selected_feed)
+
+                            rclient.zadd(lastSentFeeds, Date.parse(selected_feed.created_at), selected_feed.id, (err, reply) => {
+
+                                rclient.zcard(lastSentFeeds, (err, cardinality) => {
+
+                                    if (cardinality >= 30) {
+                                        rclient.zremrangebyrank(lastSentFeeds, 10, -1, (err, removed) => {
+                                            console.log(`INFO: ${lastSentFeeds} set refreshed`)
+                                        })
+                                    }
+                                })
+                            })
+
+                            dispatcher.dispatch(selected_feed, 99);
+                        }
+                    })
                 })
             })
             .catch(reason => console.log(reason))
-    }, 30 * 60 * 1000),
+    }, feedRequestInterval),
     getFeedRange: (limitDate) => {
 
         if (!limitDate) {
