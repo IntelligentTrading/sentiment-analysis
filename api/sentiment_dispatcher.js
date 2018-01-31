@@ -4,11 +4,11 @@ const token = process.env.TELEGRAM_BOT_TOKEN;
 const bot = new TelegramBot(token, { polling: false });
 const _ = require('lodash');
 const markdown_opts = {
-    parse_mode: "Markdown" 
+    parse_mode: "Markdown"
 }
 
 var dispatcher = {
-    dispatch: (feed) => {
+    dispatch: (feed, plan = 0) => {
 
         var keyboard_options = {
             parse_mode: "Markdown",
@@ -17,17 +17,21 @@ var dispatcher = {
             }
         };
 
+        console.log(`Dispatching crowd analysis feed #${feed.id}`);
+
         webservices.users()
             .then(jsonUsers => {
-                var users = JSON.parse(jsonUsers).filter(user => user.eula == true)
-                users.map(user => bot.sendMessage(user.telegram_chat_id, template(feed), keyboard_options))
+                var users = JSON.parse(jsonUsers).filter(user => user.eula == true && user.settings.subscription_plan >= plan)
+
+                if (users)
+                    users.map(user => bot.sendMessage(user.telegram_chat_id, template(feed), keyboard_options))
             })
             .catch(reason => console.log(reason))
     }
 }
 
 var template = (feed) => {
-    return `*Crowd Sentiment Analysis* (by CryptoPanic)\n${feed.title}\n${_.join(feed.currencies.map(c => `#${c.code}`), ' ')}\n\n${feed.votes.positive} ⇧   ${feed.votes.negative} ⇩   ${feed.votes.important}‼`
+    return `*Crowd Sentiment Analysis* (by CryptoPanic)\n${feed.title}\n${feed.currencies ? _.join(feed.currencies.map(c => `#${c.code}`), ' ') : ''}\n\n${feed.votes.positive} ⇧   ${feed.votes.negative} ⇩   ${feed.votes.important}‼`
 }
 
 var vote_keyboard = (feed) => {

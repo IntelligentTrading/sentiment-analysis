@@ -14,7 +14,7 @@ threshold_date.setUTCHours(0, 0, 0, 0) // let's get today at midnight and all th
 var yesterday = new Date()
 yesterday.setDate(yesterday.getDate() - 1)
 yesterday.setUTCHours(0, 0, 0, 0)
-/*
+
 var latestFeed = () => setInterval(() => {
     crypto_panic_api.lastPage({ filter: 'hot' })
         .then(results => {
@@ -29,7 +29,7 @@ var latestFeed = () => setInterval(() => {
                     if (last_sent_feeds.length > 10)
                         last_sent_feeds = last_sent_feeds.splice(1);
 
-                    dispatcher.dispatch(selected_feed);
+                    dispatcher.dispatch(selected_feed, 99);
                     //send feed
                 }
             })
@@ -37,9 +37,7 @@ var latestFeed = () => setInterval(() => {
         .catch(reason => console.log(reason))
 }, 30 * 60 * 1000) // check every 30 minutes 30 * 60 * 1000
 
-*/
-
-crypto_panic_api.all({ filter: 'hot' }, yesterday)
+/*crypto_panic_api.all({ filter: 'hot' }, yesterday)
     .then(results => {
         var feeds = [];
 
@@ -89,4 +87,7 @@ crypto_panic_api.all({ filter: 'hot' }, yesterday)
         console.log(err)
     })
 
-//latestFeed();
+*/
+
+console.log('INFO: Crowd Sentiment Analysis Service starting');
+latestFeed();
