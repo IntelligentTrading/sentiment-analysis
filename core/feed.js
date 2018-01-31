@@ -37,7 +37,7 @@ var feedManager = {
                                 rclient.zcard(lastSentFeeds, (err, cardinality) => {
 
                                     if (cardinality >= 30) {
-                                        rclient.zremrangebyrank(lastSentFeeds, 10, -1, (err, removed) => {
+                                        rclient.zremrangebyrank(lastSentFeeds, 0, 0, (err, removed) => {
                                             console.log(`INFO: ${lastSentFeeds} set refreshed`)
                                         })
                                     }
