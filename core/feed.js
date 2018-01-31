@@ -3,7 +3,7 @@ var dispatcher = require('../api/sentiment_dispatcher').dispatcher;
 var _ = require('lodash');
 var fs = require('fs');
 var redis = require('redis')
-rclient = redis.createClient();
+rclient = redis.createClient(process.env.REDIS_URL);
 
 rclient.on("error", function (err) {
     console.log("Error " + err);
@@ -13,7 +13,7 @@ var logger = fs.createWriteStream('sentiment.txt', {
     flags: 'a' // 'a' means appending (old data will be preserved)
 })
 
-var feedRequestInterval = 3000 // 30 * 60 * 1000;
+var feedRequestInterval = 30 * 60 * 1000;
 var lastSentFeeds = 'lastSentFeeds';
 var threshold_date = new Date()
 threshold_date.setUTCHours(0, 0, 0, 0) // let's get today at midnight and all the today's feeds 
