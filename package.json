@@ -20,6 +20,7 @@
     "express": "^4.16.2",
     "firebase-admin": "^5.5.1",
     "node-telegram-bot-api": "^0.30.0",
+    "plotly": "^1.0.6",
     "redis": "^2.8.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
