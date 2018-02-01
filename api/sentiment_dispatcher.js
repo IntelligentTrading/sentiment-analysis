@@ -14,7 +14,8 @@ var dispatcher = {
             parse_mode: "Markdown",
             reply_markup: {
                 inline_keyboard: vote_keyboard(feed)
-            }
+            },
+            disable_web_page_preview: true
         };
 
         console.log(`Dispatching crowd analysis feed #${feed.id}`);
@@ -31,7 +32,7 @@ var dispatcher = {
 }
 
 var template = (feed) => {
-    return `*Crowd Sentiment Analysis* (by CryptoPanic)\n${feed.title}\n${feed.currencies ? _.join(feed.currencies.map(c => `#${c.code}`), ' ') : ''}\n\n${feed.votes.positive} ⇧   ${feed.votes.negative} ⇩   ${feed.votes.important}‼`
+    return `*Crowd Sentiment*\n${feed.title}\n[Read on CryptoPanic](${feed.url})\n\n${feed.currencies ? _.join(feed.currencies.map(c => `#${c.code}`), ' ') : ''}\n\n${feed.votes.positive} ⇧   ${feed.votes.negative} ⇩   ${feed.votes.important}‼`
 }
 
 var vote_keyboard = (feed) => {
