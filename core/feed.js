@@ -13,12 +13,15 @@ var logger = fs.createWriteStream('sentiment.txt', {
     flags: 'a' // 'a' means appending (old data will be preserved)
 })
 
-var feedRequestInterval = 30 * 60 * 1000;
+var feedRequestInterval = 3000 // * 60 * 1000;
 var lastSentFeeds = 'lastSentFeeds';
 var threshold_date = new Date()
 threshold_date.setUTCHours(0, 0, 0, 0) // let's get today at midnight and all the today's feeds 
 
 var feedManager = {
+    /**
+     * @description Gets the feeds for the last day only
+     */
     latestFeed: () => setInterval(() => {
         crypto_panic_api.lastPage({ filter: 'hot' })
             .then(results => {
@@ -36,8 +39,8 @@ var feedManager = {
 
                                 rclient.zcard(lastSentFeeds, (err, cardinality) => {
 
-                                    if (cardinality >= 30) {
-                                        rclient.zremrangebyrank(lastSentFeeds, 10, -1, (err, removed) => {
+                                    if (cardinality >= 100) {
+                                        rclient.zremrangebyrank(lastSentFeeds, 0, 0, (err, removed) => {
                                             console.log(`INFO: ${lastSentFeeds} set refreshed`)
                                         })
                                     }
@@ -51,14 +54,19 @@ var feedManager = {
             })
             .catch(reason => console.log(reason))
     }, feedRequestInterval),
-    getFeedRange: (limitDate) => {
+    /**
+     * Gets the feeds from today to daysBack days
+     * @param daysBack The number of days back from today for the feed retrival
+     */
+    getFeedRange: (daysBack) => {
 
-        if (!limitDate) {
-
-            limitDate = new Date()
-            limitDate.setDate(limitDate.getDate() - 1)
-            limitDate.setUTCHours(0, 0, 0, 0)
+        if (!daysBack) {
+            daysBack = 1;
         }
+
+        var limitDate = new Date()
+        limitDate.setDate(limitDate.getDate() - parseInt(daysBack))
+        limitDate.setUTCHours(0, 0, 0, 0)
 
         crypto_panic_api.all({ filter: 'hot' }, limitDate)
             .then(results => {

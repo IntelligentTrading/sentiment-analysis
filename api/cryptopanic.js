@@ -14,7 +14,7 @@ var cryptoPanic = {
      * @param {object} filters Add filters such as "filter=trending" or "currencies=ETH"
      * @param {int} pages the number of pages to fetch
      */
-    all: (filters, pages = 10) => {
+    all: (filters, limitDate) => {
         var filters_string = "";
 
         if (filters) {
@@ -24,7 +24,7 @@ var cryptoPanic = {
                 }
             })
         }
-        return multiplePagesRequest(`${url}${filters_string}`, pages);
+        return multiplePagesRequest(`${url}${filters_string}`, limitDate);
     },
     lastPage: (filters) => {
         var filters_string = "";
@@ -54,9 +54,10 @@ var cryptoRequestSync = (request_url) => {
 }
 
 /**
- * Retrieves CryptoPanic feed asynchronously
+ * Retrieves CryptoPanic feed asynchronously back to limitDate
+ * @param limitDate the last date allowed for created_at
  */
-var multiplePagesRequest = (request_url, limit_date) => new Promise((resolve, reject) => {
+var multiplePagesRequest = (request_url, limitDate) => new Promise((resolve, reject) => {
 
     var cumulative_results = [];
 
@@ -66,19 +67,19 @@ var multiplePagesRequest = (request_url, limit_date) => new Promise((resolve, re
     timed_request = setInterval(async () => {
         try {
             if (next_page_url) {
-                console.log(`Sending request to ${next_page_url}`)
+                console.log(`DEBUG: Sending request to ${next_page_url}`)
                 var jsonResult = await cryptoRequestSync(next_page_url);
                 var resultObj = JSON.parse(jsonResult);
                 var results = resultObj.results;
 
                 var allowed_results = results.filter(res => {
                     var feed_date_object = new Date(res.created_at);
-                    return feed_date_object >= limit_date
+                    return feed_date_object >= limitDate
                 })
 
                 var too_old_results = results.filter(res => {
                     var feed_date_object = new Date(res.created_at);
-                    return feed_date_object < limit_date
+                    return feed_date_object < limitDate
                 })
 
                 cumulative_results.push(allowed_results);
