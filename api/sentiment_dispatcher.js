@@ -38,9 +38,9 @@ var template = (feed) => {
 var vote_keyboard = (feed) => {
     var keyboard = [];
     keyboard.push([
-        { text: `⇧ Bullish`, callback_data: `SEN_BULL_${feed.id}` },
-        { text: `⇩ Bearish`, callback_data: `SEN_BEAR_${feed.id}` },
-        { text: `!! Important`, callback_data: `SEN_IMP_${feed.id}` }])
+        { text: `⇧ Bullish`, callback_data: `panic.DB:BULL_${feed.id}` },
+        { text: `⇩ Bearish`, callback_data: `panic.DB:BEAR_${feed.id}` },
+        { text: `!! Important`, callback_data: `panic.DB:IMP_${feed.id}` }])
 
     return keyboard;
 }
