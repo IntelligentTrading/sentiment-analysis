@@ -14,6 +14,7 @@ var logger = fs.createWriteStream('sentiment.txt', {
 })
 
 var feedRequestInterval = 30 * 60 * 1000; 
+
 var lastSentFeeds = 'lastSentFeeds';
 var threshold_date = new Date()
 threshold_date.setUTCHours(0, 0, 0, 0) // let's get today at midnight and all the today's feeds 
