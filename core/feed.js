@@ -47,7 +47,7 @@ var feedManager = {
                                 })
                             })
 
-                            dispatcher.dispatch(selected_feed, 99);
+                            dispatcher.dispatch(selected_feed, 0);
                         }
                     })
                 })
