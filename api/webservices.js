@@ -7,7 +7,7 @@ function Options() {
     return {
         headers: {
             'NSVC-API-KEY': node_svc_api_key
-        } 
+        }
     }
 }
 
@@ -20,6 +20,23 @@ var api = {
 
         var request_opts = new Options();
         request_opts.uri = `${node_svc_api}/users/${chat_id}?${stringified_filters}`;
+        return rp(request_opts);
+    },
+    saveFeed: (feed) => {
+        var request_opts = {
+            uri: `${node_svc_api}/panic`,
+            method: 'POST',
+            body: {
+                feedId: feed.id,
+                votes: feed.votes,
+                news: feed.title,
+                timestamp: feed.created_at
+            },
+            json: true,
+            headers: {
+                'NSVC-API-KEY': process.env.NODE_SVC_API_KEY
+            }
+        };
         return rp(request_opts);
     }
 }
