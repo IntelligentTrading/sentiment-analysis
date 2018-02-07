@@ -29,7 +29,8 @@ var api = {
             body: {
                 feedId: feed.id,
                 votes: feed.votes,
-                news: feed.title
+                news: feed.title,
+                timestamp: feed.created_at
             },
             json: true,
             headers: {
