@@ -20,6 +20,8 @@ var feedManager = {
      * @description Gets the feeds for the last day only
      */
     latestFeed: () => setInterval(() => {
+        console.log('Checking CryptoPanic updates...')
+
         crypto_panic_api.lastPage({ filter: 'hot' })
             .then(results => {
                 var filtered_feeds = results.filter(res => new Date(res.created_at).getTime() > threshold_date.getTime());
@@ -43,7 +45,7 @@ var feedManager = {
                                     }
                                 })
                             })
-                            dispatcher.dispatch(selected_feed, 99);
+                            dispatcher.dispatch(selected_feed, 0);
 
                         }
                     })
