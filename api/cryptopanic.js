@@ -1,6 +1,5 @@
 var rp = require('request-promise')
 var request = require('request');
-var moq = require('../data/moq');
 var _ = require('lodash');
 
 var CRYPTO_PANIC_TOKEN = process.env.CRYPTO_PANIC_API_KEY;
