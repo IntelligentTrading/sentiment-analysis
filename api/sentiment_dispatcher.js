@@ -18,16 +18,18 @@ var dispatcher = {
             disable_web_page_preview: true
         };
 
-        console.log(`Dispatching crowd analysis feed #${feed.id}`);
+        webservices.saveFeed(feed).then(() => {
 
-        webservices.users()
-            .then(jsonUsers => {
-                var users = JSON.parse(jsonUsers).filter(user => user.eula == true && user.settings.subscription_plan >= plan)
+            console.log(`Dispatching crowd analysis feed #${feed.id}`);
 
-                if (users)
-                    users.map(user => bot.sendMessage(user.telegram_chat_id, template(feed), keyboard_options))
-            })
-            .catch(reason => console.log(reason))
+            webservices.users()
+                .then(jsonUsers => {
+                    var users = JSON.parse(jsonUsers).filter(user => user.eula == true && user.settings.subscription_plan >= plan)
+
+                    if (users)
+                        users.map(user => bot.sendMessage(user.telegram_chat_id, template(feed), keyboard_options))
+                })
+        }).catch(reason => console.log(reason))
     }
 }
 
@@ -38,9 +40,9 @@ var template = (feed) => {
 var vote_keyboard = (feed) => {
     var keyboard = [];
     keyboard.push([
-        { text: `⇧ Bullish`, callback_data: `SEN_BULL_${feed.id}` },
-        { text: `⇩ Bearish`, callback_data: `SEN_BEAR_${feed.id}` },
-        { text: `!! Important`, callback_data: `SEN_IMP_${feed.id}` }])
+        { text: `⇧ Bullish`, callback_data: `panic.DB:BULL_${feed.id}` },
+        { text: `⇩ Bearish`, callback_data: `panic.DB:BEAR_${feed.id}` },
+        { text: `!! Important`, callback_data: `panic.DB:IMP_${feed.id}` }])
 
     return keyboard;
 }
