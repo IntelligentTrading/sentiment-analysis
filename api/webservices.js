@@ -30,7 +30,8 @@ var api = {
                 feedId: feed.id,
                 votes: feed.votes,
                 news: feed.title,
-                timestamp: feed.created_at
+                timestamp: feed.created_at,
+                url: feed.url
             },
             json: true,
             headers: {
