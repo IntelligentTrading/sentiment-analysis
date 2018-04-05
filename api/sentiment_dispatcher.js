@@ -40,9 +40,9 @@ var template = (feed) => {
 var vote_keyboard = (feed) => {
     var keyboard = [];
     keyboard.push([
-        { text: `⇧ Bullish`, callback_data: `panic.DB:BULL_${feed.id}` },
-        { text: `⇩ Bearish`, callback_data: `panic.DB:BEAR_${feed.id}` },
-        { text: `!! Important`, callback_data: `panic.DB:IMP_${feed.id}` }])
+        { text: `⇧ Bullish`, callback_data: JSON.stringify({ cmd: 'panic', d: { fid: feed.id, r: 'bull' } }) },
+        { text: `⇩ Bearish`, callback_data: JSON.stringify({ cmd: 'panic', d: { fid: feed.id, r: 'bear' } }) },
+        { text: `!! Important`, callback_data: JSON.stringify({ cmd: 'panic', d: { fid: feed.id, r: 'imp' } }) }])
 
     return keyboard;
 }
