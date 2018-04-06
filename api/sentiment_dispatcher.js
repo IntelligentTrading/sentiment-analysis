@@ -22,14 +22,14 @@ var dispatcher = {
 
             console.log(`Dispatching crowd analysis feed #${feed.id}`);
 
-            webservices.users({ filters: ['is_crowd_enabled=true', 'is_muted=false'] })
-                .then(jsonUsers => {
-                    var users = JSON.parse(jsonUsers).filter(user => user.eula == true && user.settings.subscription_plan >= plan)
+            webservices.users({ filters: ['is_crowd_enabled=true', 'is_muted=false'] }).then(jsonUsers => {
+                var users = JSON.parse(jsonUsers).filter(user => user.eula == true && user.settings.subscription_plan >= plan)
 
-                    if (users)
-                        users.map(user => bot.sendMessage(user.telegram_chat_id, template(feed), keyboard_options))
-                })
-        }).catch(reason => console.log(reason))
+                if (users)
+                    users.map(user => bot.sendMessage(user.telegram_chat_id, template(feed), keyboard_options)
+                        .catch(reason => console.log(`${reason}:chat ${user.telegram_chat_id}`)))
+            })
+        }).catch(reason => { console.log(reson) })
     }
 }
 
