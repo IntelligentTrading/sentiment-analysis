@@ -29,7 +29,7 @@ var dispatcher = {
                     users.map(user => bot.sendMessage(user.telegram_chat_id, template(feed), keyboard_options)
                         .catch(reason => console.log(`${reason}:chat ${user.telegram_chat_id}`)))
             })
-        }).catch(reason => { console.log(reson) })
+        }).catch(reason => { console.log(reason) })
     }
 }
 
